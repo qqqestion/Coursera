@@ -9,6 +9,7 @@ using Sentence = vector<Token>;
 
 template <typename Token>
 vector<Sentence<Token>> SplitIntoSentences(vector<Token> tokens) {
+	cout << "hello";
 	
 }
 
