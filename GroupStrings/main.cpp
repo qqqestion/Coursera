@@ -10,35 +10,12 @@ using namespace std;
 template <typename String>
 using Group = vector<String>;
 
-set<char> alw 	 = {'a', 'l', 'w'};
-set<char> oprt   = {'o', 'p', 'r', 't'};
-set<char> opt    = {'o', 'p', 't'};
-set<char> alopt  = {'a', 'l', 'o', 'p', 't'};
-
-bool isInSet(const set<char>& sets, const char letter) {
-	return sets.find(letter) != sets.end();
-
-bool isMyLetter(const char letter, char& whichSet) {
-	whichSet += (isInSet(alw, letter) ? 1 : 0;
-	whichSet << 1; 
-
-	whichSet += (isInSet(oprt, letter) ? 1 : 0;
-	whichSet << 1; 
-
-	whichSet += (isInSet(opt, letter) ? 1 : 0;
-	whichSet << 1; 
-
-	whichSet += (isInSet(aropt, letter) ? 1 : 0;
-	whichSet << 1; 
-	if (isInSet(oprt, letter))
-		whichSet = 2;
-	if (isInSet(opt, letter))
-		whichSet = 3;
-}
-
 vector<Group<String>> GloupHeavyStrings(vector<String> strings) {
 	vector<Group<String>> result;
-	for (const auto string : strings) {
+	vector<set<char>> dics;
+	for (const auto& string : strings) {
+		for (auto& dic : dics) {
+			if (dic.find(
 
 
 void TestGroupingABC() {
