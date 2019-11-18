@@ -21,15 +21,24 @@ void PrintRange(Iterator first, Iterator last) {
 
 template <typename RandomIt>
 void MakeJosephusPermutation(RandomIt first, RandomIt last, uint32_t step_size) {
+	//list<typename RandomIt::value_type> pool;
 	vector<typename RandomIt::value_type> pool;
 	for (auto it = first; it != last; it++) {
 		pool.push_back(move(*it));
 	}
-	size_t cur_pos = 0;
-	size_t size = last - first;
-	for (int i; i < size; i++) {
-		*(first++) = move(pool[cur_pos]);
-		cur_pos = (cur_pos + step_size) % size;
+	auto cur_pos = pool.begin();
+	size_t i_cur_pos = 0;
+	//size_t i_cur_pos = 0;
+	while (!pool.empty()) {
+		*(first++) = move(*cur_pos);
+		pool.erase(cur_pos);
+		if (pool.empty()) {
+			break;
+		}
+		//i_cur_pos = (i_cur_pos + step_size - 1) % pool.size();
+		//cur_pos = shif_iterator(pool.begin(), i_cur_pos);
+		i_cur_pos = (i_cur_pos + step_size - 1) % pool.size();
+		cur_pos = pool.begin() + i_cur_pos;
 	}
 }
 

@@ -1,5 +1,4 @@
 #include "test_runner.h"
-#include "profile.h"
 
 #include <cstdint>
 #include <iterator>
@@ -7,7 +6,6 @@
 #include <vector>
 #include <algorithm>
 #include <list>
-#include <deque>
 
 
 using namespace std;
@@ -21,15 +19,21 @@ void PrintRange(Iterator first, Iterator last) {
 
 template <typename RandomIt>
 void MakeJosephusPermutation(RandomIt first, RandomIt last, uint32_t step_size) {
-	vector<typename RandomIt::value_type> pool;
-	for (auto it = first; it != last; it++) {
-		pool.push_back(move(*it));
-	}
-	size_t cur_pos = 0;
+	list<typename RandomIt::value_type*> l; 
+	
+	l.push_back(&(*i));
+	
+	auto cur_pos = first;
+	
 	size_t size = last - first;
-	for (int i; i < size; i++) {
-		*(first++) = move(pool[cur_pos]);
-		cur_pos = (cur_pos + step_size) % size;
+
+	while (size) {
+		l.push_back(&(*cur_pos));
+		i--;
+
+		cur_pos = first + (cur_pos - first + step_size) 
+
+		//l.erase(cur_pos);
 	}
 }
 
@@ -42,11 +46,13 @@ vector<int> MakeTestVector() {
 struct NoncopyableInt {
 	int value;
 
+/*	
 	NoncopyableInt(const NoncopyableInt&) = delete;
 	NoncopyableInt& operator=(const NoncopyableInt&) = delete;
 
 	NoncopyableInt(NoncopyableInt&&) = default;
 	NoncopyableInt& operator=(NoncopyableInt&&) = default;
+*/	
 };
 
 bool operator == (const NoncopyableInt& lhs, const NoncopyableInt& rhs) {
@@ -64,10 +70,6 @@ void TestAvoidsCopying() {
 	numbers.push_back({3});
 	numbers.push_back({4});
 	numbers.push_back({5});
-	/* 1	3	5	 2	  4
-	 * 0   0+2 2+2 4+2%5 1+2
-	 * 
-	 */
 
 	MakeJosephusPermutation(begin(numbers), end(numbers), 2);
 
@@ -117,31 +119,9 @@ void MyTestAvoidsCopying() {
 	cout << "\n";
 }
 
+
 int main() {
 	TestRunner tr;
 	RUN_TEST(tr, MyTestAvoidsCopying);
-#define SIZE 100000
-	{
-		vector<int> v;
-		for (int i; i < SIZE; i++) {
-			v.push_back(i);
-		}
-		LOG_DURATION("vector");
-		while (!v.empty()) {
-			auto i = v.begin() + v.size() / 2;
-			v.erase(i);
-		}
-	}
-	{
-		deque<int> v;
-		for (int i; i < SIZE; i++) {
-			v.push_back(i);
-		}
-		LOG_DURATION("deque");
-		while (!v.empty()) {
-			auto i = v.begin() + v.size() / 2;
-			v.erase(i);
-		}
-	}
 	return 0;
 }

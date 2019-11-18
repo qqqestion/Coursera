@@ -4,18 +4,32 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <map>
 
 using namespace std;
 
 template <typename String>
 using Group = vector<String>;
 
-vector<Group<String>> GloupHeavyStrings(vector<String> strings) {
+template <typename String>
+using Char = typename String::value_type;
+
+template <typename String>
+vector<Group<String>> GroupHeavyStrings(vector<String> strings) {
+	map<set<typename String::value_type>, Group<String>> groups;
+	for (String& word : strings) {
+		set<typename String::value_type> chars;
+		for (typename String::value_type symbol : word) {
+			chars.insert(move(symbol));
+		}
+		groups[chars].push_back(move(word));
+	}
 	vector<Group<String>> result;
-	vector<set<char>> dics;
-	for (const auto& string : strings) {
-		for (auto& dic : dics) {
-			if (dic.find(
+	for (auto& word : groups) {
+		result.push_back(move(word.second));
+	}
+	return result;
+}
 
 
 void TestGroupingABC() {
