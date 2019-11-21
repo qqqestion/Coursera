@@ -22,9 +22,10 @@ vector<Group<String>> GroupHeavyStrings(vector<String> strings) {
 		for (typename String::value_type symbol : word) {
 			chars.insert(move(symbol));
 		}
-		groups[chars].push_back(move(word));
+		groups[move(chars)].push_back(move(word));
 	}
 	vector<Group<String>> result;
+	result.reserve(groups.size());
 	for (auto& word : groups) {
 		result.push_back(move(word.second));
 	}
@@ -58,3 +59,4 @@ int main() {
 	RUN_TEST(tr, TestGroupingReal);
 	return 0;
 }
+

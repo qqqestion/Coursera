@@ -1,6 +1,7 @@
 //#pragma once
 
 #include <algorithm>
+#include <iterator>
 using namespace std;
 
 template <typename T>
@@ -9,10 +10,12 @@ public:
   SimpleVector() = default;
   explicit SimpleVector(size_t size);
   SimpleVector(const SimpleVector<T>& other);
+  SimpleVector(SimpleVector<T>&& other);
   ~SimpleVector();
 
   T& operator[](size_t index);
   SimpleVector<T>& operator=(const SimpleVector<T>& other);
+  SimpleVector<T>& operator=(SimpleVector<T>&& other);
 
   T* begin();
   const T* cbegin() const;
@@ -22,6 +25,7 @@ public:
   size_t Size() const;
   size_t Capacity() const;
   void PushBack(const T& value);
+  void PushBack(T&& value);
 
 private:
   T* data = nullptr;
@@ -38,8 +42,19 @@ SimpleVector<T>::SimpleVector(size_t size)
 }
 
 template <typename T>
-SimpleVector<T>::SimpleVector(const SimpleVector<T>& other) : data(new T[other.capacity]), size(other.size), capacity(other.capacity) {
+SimpleVector<T>::SimpleVector(const SimpleVector<T>& other) : 
+	data(new T[other.capacity]), size(other.size), 
+	capacity(other.capacity) {
 	copy(other.cbegin(), other.cend(), data);
+}
+
+template <typename T>
+SimpleVector<T>::SimpleVector(SimpleVector<T>&& other) : 
+	data(other.data), size(other.size), 
+	capacity(other.capacity) {
+	other.data = nullptr;
+	other.size = 0;
+	other.capacity = 0;
 }
 
 template <typename T>
@@ -57,6 +72,18 @@ SimpleVector<T>& SimpleVector<T>::operator=(const SimpleVector<T>& other) {
 	delete[] data;
 	data = new T[other.capacity];
 	copy(other.cbegin(), other.cend(), data);
+	size = other.size;
+	capacity = other.capacity;
+	return *this;
+}
+
+template <typename T>
+SimpleVector<T>& SimpleVector<T>::operator=(SimpleVector<T>&& other) {
+	delete[] data;
+	data = new T[other.capacity];
+	copy(make_move_iterator(other.begin()), 
+		 make_move_iterator(other.end()), 
+		 data);
 	size = other.size;
 	capacity = other.capacity;
 	return *this;
@@ -83,6 +110,19 @@ void SimpleVector<T>::PushBack(const T& value) {
     capacity = new_cap;
   }
   data[size++] = value;
+}
+
+template <typename T>
+void SimpleVector<T>::PushBack(T&& value) {
+  if (size >= capacity) {
+    auto new_cap = capacity == 0 ? 1 : 2 * capacity;
+    auto new_data = new T[new_cap];
+    copy(make_move_iterator(begin()), make_move_iterator(end()), new_data);
+    delete[] data;
+    data = new_data;
+    capacity = new_cap;
+  }
+  data[size++] = move(value);
 }
 
 template <typename T>
