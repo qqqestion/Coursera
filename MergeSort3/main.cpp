@@ -31,26 +31,25 @@ void MergeSort(RandomIt range_begin, RandomIt range_end) {
 	}
 
 	vector<typename RandomIt::value_type> elements(
-			range_begin, range_end
+			make_move_iterator(range_begin), make_move_iterator(range_end)
 	);
 	
 	auto one_third = elements.begin() + size / 3;
-	auto two_third = one_third + size / 3;
+	auto two_third = elements.begin() + size * 2 / 3;
 
 	MergeSort(elements.begin(), one_third);
 	MergeSort(one_third, two_third);
 	MergeSort(two_third, elements.end());
 
 	vector<typename RandomIt::value_type> temp;
-	merge(elements.begin(), one_third,
-			one_third, two_third,
+	merge(make_move_iterator(elements.begin()), make_move_iterator(one_third),
+			make_move_iterator(one_third), make_move_iterator(two_third),
 			back_inserter(temp)
 	);
-	merge(temp.begin(), temp.end(),
-			two_third, elements.end(),
+	merge(make_move_iterator(temp.begin()), make_move_iterator(temp.end()),
+			make_move_iterator(two_third), make_move_iterator(elements.end()),
 			range_begin
 	);
-	
 }
 
 void OneMoreTestIntVector() {
@@ -68,7 +67,7 @@ void TestIntVector() {
 }
 
 void Test() {
-  vector<int> v = {6, 4, 7, 6, 4, 4, 0, 1, 5};
+  vector<int> v = {6, 4, 7, 6, 4, 4, 0, 1, 5, 1};
   MergeSort(begin(v), end(v));
   for (int x : v) {
     cout << x << " ";
