@@ -1,6 +1,8 @@
 #include "test_runner.h"
 #include "profile.h"
 #include <vector>
+#include <algorithm>
+
 #include <future>
 
 using namespace std;
@@ -122,12 +124,12 @@ const size_t column_count = 1500;
 int64_t CalculateMatrixSum(const vector<vector<int>>& matrix) {
 	// Реализуйте эту функцию
 	int64_t sum = 0;
-	vector<future<int64_t>> futures;
+	vector<future<int>> futures;
 	for (int i = 0; i < 9000; i += 6) {
 		futures.push_back(
-			  async([matrix[i]] {
-				  return accumulate(begin(matrix[i]), end(matrix[i]), 0);
-				  })
+			async([i, &matrix] {
+				return accumulate(begin(matrix[i]), end(matrix[i]), 0);
+			})
 		);
 	}
   

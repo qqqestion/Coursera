@@ -43,6 +43,8 @@ void TestGroupingABC() {
 }
 
 void TestGroupingReal() {
+	
+		
 	vector<string> strings = {"law", "port", "top", "laptop", "pot", "paloalto", "wall", "awl"};
 	auto groups = GroupHeavyStrings(strings);
 	ASSERT_EQUAL(groups.size(), 4);
