@@ -1,0 +1,6 @@
+# ignore apps bin
+app
+
+.DS_store
+
+.vscode
